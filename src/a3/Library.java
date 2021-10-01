@@ -6,7 +6,7 @@ public class Library
 {
 	public static class book
 	{	
-		int book_num;
+		String book_num;
 		String book_name;
 		String booktype;
 		String author;
@@ -14,38 +14,38 @@ public class Library
 		boolean yesno;
 		int people;
 			
-		book(int a,String b,String c,String d,int e)
+		book(String a,String b,String c,String d,int e)
 		{
 			book_num=a;
 			book_name=b;
 			booktype=c;
 			author=d;
 			page=e;
-			yesno=false;
-			people=0;
+			yesno=false;	//是否有人借閱
+			people=0;		//預約人數
 		}
 	}
 	
 	public static void main(String[] args)
 	{
 		book[]a=new book[20];					//書庫裡原書單
-		a[0]=new book(82101,"Cihai","Reference","Shu Xincheng",20000);
-		a[1]=new book(80001,"WW2 History","History","Winston Churchill",971);
-		a[2]=new book(00003,"Egg 100","Cookbook","Su yuan ma",104);
-		a[3]=new book(50001,"Be a honest man","Political","Ma Ying jeou",520);
-		a[4]=new book(85719,"Sword Art Online","Novel","Reki Kawahara",8763);
-		a[5]=new book(85728,"Spice and Wolf","Novel","Isuna Hasekura",510);
-		a[6]=new book(85707,"The Old Man and the Sea","Novel","Ernest Hemingway",127);
-		a[7]=new book(85703,"Romance of the Three Kingdoms","Novel","Luo Guanzhong",480);
-		a[8]=new book(80005,"Records of the Grand Historian","History","Sima Qian",6000);
+		a[0]=new book("82101","Cihai","Reference","Shu Xincheng",20000);
+		a[1]=new book("80001","WW2 History","History","Winston Churchill",971);
+		a[2]=new book("00003","Egg 100","Cookbook","Su yuan ma",104);
+		a[3]=new book("50001","Be a honest man","Political","Ma Ying jeou",520);
+		a[4]=new book("85719","Sword Art Online","Novel","Reki Kawahara",8763);
+		a[5]=new book("85728","Spice and Wolf","Novel","Isuna Hasekura",510);
+		a[6]=new book("85707","The Old Man and the Sea","Novel","Ernest Hemingway",127);
+		a[7]=new book("85703","Romance of the Three Kingdoms","Novel","Luo Guanzhong",480);
+		a[8]=new book("80005","Records of the Grand Historian","History","Sima Qian",6000);
 		String book;
 		String bname;
 		String ynres;
 		String btype;
 		String bauth;
 		String ex;
+		String bnum;
 		int bpage=0;
-		int bnum=0;
 		int count=9;							//書庫原書量
 		int count2=0;							//借閱書量
 		int count3=0;							//預約書量
@@ -60,19 +60,20 @@ public class Library
 				
 			System.out.println("Please enter student,staff or exit.");
 			person=sc.nextLine();
-		
-			if(person.equals("student"))							//學生介面
+			
+			/*學生介面*/
+			if(person.equals("student"))
 			{	
 				String sctrl;
 				while(true)
 				{	
 					System.out.println("Student number : 105502501");
-					System.out.println("Borrowed book : ");
+					System.out.println("Borrowed book : ");	//列出已借閱書籍
 					for(int j=0;j<count2;j++)
 					{
 						System.out.println("\t"+bor[j].book_num+"\t"+bor[j].book_name);
 					}
-					System.out.println("Reserved book : ");
+					System.out.println("Reserved book : ");	//列出已預約書籍
 					for(int k=0;k<count3;k++)
 					{
 						System.out.println("\t"+res[k].book_name);
@@ -81,11 +82,12 @@ public class Library
 				
 					sctrl=sc.nextLine();
 				
-					if(sctrl.equals("borrow"))						//借書
+					///借書///
+					if(sctrl.equals("borrow"))
 					{
 						System.out.println("bookname or booknumber?");
 						book=sc.nextLine();
-						if(book.equals("bookname"))
+						if(book.equals("bookname"))			//用書名查詢
 						{
 							System.out.println("Enter the bookname.");
 							bname=sc.nextLine();
@@ -93,21 +95,21 @@ public class Library
 							{
 								if(bname.equals(a[i].book_name))
 								{
-									if(a[i].yesno==false)
+									if(a[i].yesno==false)	//無人借閱 成功借書
 									{
 										System.out.println("Successful!");
 										a[i].yesno=true;
 										bor[count2]=a[i];
 										count2++;
 									}
-									else if(a[i].yesno==true)
+									else if(a[i].yesno==true)	//有人借閱 詢問是否預約
 									{
 										System.out.println("Failed");
 										System.out.println("Do you want to reserve this book?");
 										ynres=sc.nextLine();
 										if(ynres.equals("yes"))
 										{
-											if(a[i].people==10)
+											if(a[i].people==10)	//已有十人預約 則預約失敗
 											{
 												System.out.println("Over 10 people reserved.");
 											}
@@ -136,10 +138,10 @@ public class Library
 								}
 							}
 						}
-						else if(book.equals("booknumber"))
+						else if(book.equals("booknumber"))		//用書號查詢
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count;i++)
 							{
 								if(bnum==a[i].book_num)
@@ -195,7 +197,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(sctrl.equals("return"))					//還書
+					
+					///還書///
+					else if(sctrl.equals("return"))
 					{
 						System.out.println("bookname or booknumber?");
 						book=sc.nextLine();
@@ -232,7 +236,7 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count2;i++)
 							{
 								if(bnum==bor[i].book_num)
@@ -266,7 +270,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(sctrl.equals("reserve"))				//預約
+					
+					///預約///
+					else if(sctrl.equals("reserve"))
 					{
 						System.out.println("bookname or booknumber?");
 						book=sc.nextLine();
@@ -328,7 +334,7 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count;i++)
 							{
 								if(bnum==a[i].book_num)
@@ -389,7 +395,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(sctrl.equals("reservecancel"))			//取消預約
+					
+					///取消預約///
+					else if(sctrl.equals("reservecancel"))
 					{
 						System.out.println("bookname or booknumber?");
 						book=sc.nextLine();
@@ -426,7 +434,7 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count3;i++)
 							{
 								if(bnum==res[i].book_num)
@@ -460,7 +468,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(sctrl.equals("search"))					//查詢書籍
+					
+					///查詢書籍///
+					else if(sctrl.equals("search"))
 					{
 						System.out.println("How to search?(bookname,booknumber,booktype or all)");
 						book=sc.nextLine();
@@ -498,7 +508,7 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count;i++)
 							{
 								if(bnum==a[i].book_num)
@@ -594,7 +604,9 @@ public class Library
 					}
 				}
 			}
-			else if(person.equals("staff"))							//管理員介面
+			
+			/*管理員介面*/
+			else if(person.equals("staff"))							
 			{
 				String fctrl;
 				while(true)
@@ -604,10 +616,11 @@ public class Library
 				
 					fctrl=sc.nextLine();
 				
-					if(fctrl.equals("bookregister"))				//登錄新書籍
+					///登錄新書籍///
+					if(fctrl.equals("bookregister"))
 					{
 						System.out.println("Please enter booknumber:");
-						bnum=sc.nextInt();
+						bnum=sc.nextLine();
 						for(int i=0;i<count;i++)
 						{
 							if(bnum==a[i].book_num)
@@ -661,7 +674,9 @@ public class Library
 							}
 						}
 					}
-					else if(fctrl.equals("bookdelete"))				//刪除書籍
+					
+					///刪除書籍///
+					else if(fctrl.equals("bookdelete"))
 					{
 						System.out.println("bookname or booknumber?");
 						book=sc.nextLine();
@@ -691,7 +706,7 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count;i++)
 							{
 								if(bnum==a[i].book_num)
@@ -722,7 +737,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(fctrl.equals("bookedit"))				//更新書籍資料
+					
+					///更新書籍資料///
+					else if(fctrl.equals("bookedit"))
 					{
 						System.out.println("bookname or booknumber?");
 						book=sc.nextLine();
@@ -735,7 +752,7 @@ public class Library
 								if(bname.equals(a[i].book_name))
 								{
 									System.out.println("Enter new booknumber:");
-									bnum=sc.nextInt();
+									bnum=sc.nextLine();
 									a[i].book_num=bnum;
 									System.out.println("Enter new bookname:");
 									bname=sc.nextLine();
@@ -762,13 +779,13 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count;i++)
 							{
 								if(bnum==a[i].book_num)
 								{
 									System.out.println("Enter new booknumber:");
-									bnum=sc.nextInt();
+									bnum=sc.nextLine();
 									a[i].book_num=bnum;
 									System.out.println("Enter new bookname:");
 									bname=sc.nextLine();
@@ -797,7 +814,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(fctrl.equals("search"))					//查詢書單
+					
+					///查詢書單///
+					else if(fctrl.equals("search"))
 					{
 						System.out.println("How to search?(bookname,booknumber,booktype or all)");
 						book=sc.nextLine();
@@ -835,7 +854,7 @@ public class Library
 						else if(book.equals("booknumber"))
 						{
 							System.out.println("Enter the booknumber.");
-							bnum=sc.nextInt();
+							bnum=sc.nextLine();
 							for(int i=0;i<count;i++)
 							{
 								if(bnum==a[i].book_num)
@@ -921,7 +940,9 @@ public class Library
 							System.out.println("Error!");
 						}
 					}
-					else if(fctrl.equals("viewstudent"))			//查詢學生資料
+					
+					///查詢學生資料///
+					else if(fctrl.equals("viewstudent"))
 					{
 						System.out.println("Student number: 105502501");
 						System.out.println("Borrowed book:");
@@ -954,6 +975,7 @@ public class Library
 			{
 				System.out.println("Error!");
 			}
+			sc.close();
 		}
 	}
 }
