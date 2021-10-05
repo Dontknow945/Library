@@ -42,7 +42,6 @@ public class Library
 		
 		String book;
 		String bname;
-		String ynres;
 		String btype;
 		String bauth;
 		String ex;
@@ -69,21 +68,12 @@ public class Library
 					String sctrl;
 					student: while(true)
 					{	
-						System.out.println("Student number : 105502501");
-						
-						//列出已借閱書籍
-						System.out.println("Borrowed book : ");
-						for(int j=0;j<boramount;j++)
-							System.out.println("\t"+bor[j].book_num+"\t"+bor[j].book_name);
-						
-						//列出已預約書籍
-						System.out.println("Reserved book : ");
-						for(int k=0;k<resamount;k++)
-							System.out.println("\t"+res[k].book_num+"\t"+res[k].book_name);
+						studentinfo(boramount, resamount, bor, res);
 						
 						System.out.println("What do you want to do?(borrow,return,reserve,reservecancel,search or exit)");
 						sctrl=sc.nextLine();
 
+						int[] temp = {boramount, resamount};
 						switch (sctrl) {
 						
 							///借書///
@@ -98,37 +88,9 @@ public class Library
 										{
 											if(bname.equals(a[i].book_name))
 											{
-												if(a[i].yesno==false)	//無人借閱 成功借書
-												{
-													System.out.println("Successful!");
-													a[i].yesno=true;
-													bor[boramount]=a[i];
-													boramount++;
-												}
-												else if(a[i].yesno==true)	//有人借閱 詢問是否預約
-												{
-													System.out.println("Failed");
-													System.out.println("Do you want to reserve this book?");
-													ynres=sc.nextLine();
-													switch (ynres) {
-														case "yes":
-															if(a[i].people==10)	//已有十人預約 則預約失敗
-																System.out.println("Over 10 people reserved.");
-															else
-															{
-																System.out.println("Reserve completed.");
-																a[i].people++;
-																res[resamount]=a[i];
-																resamount++;
-															}
-															break;
-														case "no":
-															break;
-														default:
-															System.out.println("Error!");
-															break;
-													}
-												}
+												borrow(sc,a,bor,res,i,temp);
+												boramount = temp[0];
+												resamount = temp[1];
 												break;
 											}
 											else if(i==bamount-1)
@@ -142,37 +104,9 @@ public class Library
 										{
 											if(bnum.equals(a[i].book_num))
 											{
-												if(a[i].yesno==false)
-												{
-													System.out.println("Successful!");
-													a[i].yesno=true;
-													bor[boramount]=a[i];
-													boramount++;
-												}
-												else if(a[i].yesno==true)
-												{
-													System.out.println("Failed, this book has been borrowed.");
-													System.out.println("Do you want to reserve this book?");
-													ynres=sc.nextLine();
-													switch (ynres) {
-														case "yes":
-															if(a[i].people==10)
-																System.out.println("Over 10 people reserved.");
-															else
-															{
-																System.out.println("Reserve completed.");
-																a[i].people++;
-																res[resamount]=a[i];
-																resamount++;
-															}
-															break;
-														case "no":
-															break;
-														default:
-															System.out.println("Error!");
-															break;
-													}
-												}
+												borrow(sc,a,bor,res,i,temp);
+												boramount = temp[0];
+												resamount = temp[1];
 												break;
 											}
 											else if(i==bamount-1)
@@ -258,37 +192,9 @@ public class Library
 										{
 											if(bname.equals(a[i].book_name))
 											{
-												if(a[i].yesno==false)
-												{
-													System.out.println("Failed, no one borrowed this book.");
-													System.out.println("Do you want to borrow this book?");
-													ynres=sc.nextLine();
-													switch (ynres) {
-														case "yes":
-															System.out.println("Successful.");
-															a[i].yesno=true;
-															bor[boramount]=a[i];
-															boramount++;
-															break;
-														case "no":
-															break;
-														default:
-															System.out.println("Error!");
-															break;
-													}
-												}
-												else if(a[i].yesno==true)
-												{
-													if(a[i].people==10)
-														System.out.println("Over 10 people reserved.");
-													else
-													{
-														System.out.println("Reserve completed.");
-														a[i].people++;
-														res[resamount]=a[i];
-														resamount++;
-													}
-												}
+												reserve(sc,a,bor,res,i,temp);
+												boramount = temp[0];
+												resamount = temp[1];
 												break;
 											}
 											else if(i==bamount-1)
@@ -302,37 +208,9 @@ public class Library
 										{
 											if(bnum.equals(a[i].book_num))
 											{
-												if(a[i].yesno==false)
-												{
-													System.out.println("Failed, no one borrowed this book.");
-													System.out.println("Do you want to borrow this book?");
-													ynres=sc.nextLine();
-													switch (ynres) {
-														case "yes":
-															System.out.println("Successful.");
-															a[i].yesno=true;
-															bor[boramount]=a[i];
-															boramount++;
-															break;
-														case "no":
-															break;
-														default:
-															System.out.println("Error!");
-															break;
-													}
-												}
-												else if(a[i].yesno==true)
-												{
-													if(a[i].people==10)
-														System.out.println("Over 10 people reserved.");
-													else
-													{
-														System.out.println("Reserve completed.");
-														a[i].people++;
-														res[resamount]=a[i];
-														resamount++;
-													}
-												}
+												reserve(sc,a,bor,res,i,temp);
+												boramount = temp[0];
+												resamount = temp[1];
 												break;
 											}
 											else if(i==bamount-1)
@@ -418,16 +296,7 @@ public class Library
 										{
 											if(bname.equals(a[i].book_name))
 											{
-												System.out.print(a[i].book_num+"\t");
-												System.out.print(a[i].book_name+"\t\t");
-												System.out.print(a[i].booktype+"\t\t");
-												System.out.print(a[i].author+"\t");
-												System.out.print(a[i].page+" pages\t");
-												if(a[i].yesno==false)
-													System.out.print("Available\t");
-												else if(a[i].yesno==true)
-													System.out.println("Nonavailable\t");
-												System.out.println(a[i].people+" people reserved");
+												printbook(a,i);
 												break;
 											}
 											else if(i==bamount-1)
@@ -441,16 +310,7 @@ public class Library
 										{
 											if(bnum.equals(a[i].book_num))
 											{
-												System.out.print(a[i].book_num+"\t");
-												System.out.print(a[i].book_name+"\t\t");
-												System.out.print(a[i].booktype+"\t\t");
-												System.out.print(a[i].author+"\t");
-												System.out.print(a[i].page+" pages\t");
-												if(a[i].yesno==false)
-													System.out.print("Available\t");
-												else if(a[i].yesno==true)
-													System.out.println("Nonavailable\t");
-												System.out.println(a[i].people+" people reserved");
+												printbook(a,i);
 												break;
 											}
 											else if(i==bamount-1)
@@ -464,16 +324,7 @@ public class Library
 										{
 											if(btype.equals(a[i].booktype))
 											{
-												System.out.print(a[i].book_num+"\t");
-												System.out.print(a[i].book_name+"\t\t");
-												System.out.print(a[i].booktype+"\t\t");
-												System.out.print(a[i].author+"\t");
-												System.out.print(a[i].page+" pages\t");
-												if(a[i].yesno==false)
-													System.out.print("Available\t");
-												else if(a[i].yesno==true)
-													System.out.println("Nonavailable\t");
-												System.out.println(a[i].people+" people reserved");
+												printbook(a,i);
 											}
 											else if(i==bamount-1)
 												System.out.println("Failed, this book isn't in the list.");
@@ -482,16 +333,7 @@ public class Library
 									case "all":
 										for(int i=0;i<bamount;i++)
 										{
-											System.out.print(a[i].book_num+"\t");
-											System.out.print(a[i].book_name+"\t\t");
-											System.out.print(a[i].booktype+"\t\t");
-											System.out.print(a[i].author+"\t");
-											System.out.print(a[i].page+" pages\t");
-											if(a[i].yesno==false)
-												System.out.print("Available\t");
-											else if(a[i].yesno==true)
-												System.out.println("Nonavailable\t");
-											System.out.println(a[i].people+" people reserved");
+											printbook(a,i);
 										}
 										break;
 									default:
@@ -633,22 +475,7 @@ public class Library
 										{
 											if(bname.equals(a[i].book_name))
 											{
-												System.out.println("Enter new booknumber:");
-												bnum=sc.nextLine();
-												a[i].book_num=bnum;
-												System.out.println("Enter new bookname:");
-												bname=sc.nextLine();
-												a[i].book_name=bname;
-												System.out.println("Enter new booktype:");
-												btype=sc.nextLine();
-												a[i].booktype=btype;
-												System.out.println("Enter new author:");
-												bauth=sc.nextLine();
-												a[i].author=bauth;
-												System.out.println("Enter new pages:");
-												bpage=sc.nextInt();
-												a[i].page=bpage;
-												fctrl=sc.nextLine();
+												editbook(sc,a,i);
 												break;
 											}
 											else if(i==bamount-1)
@@ -662,22 +489,7 @@ public class Library
 										{
 											if(bnum.equals(a[i].book_num))
 											{
-												System.out.println("Enter new booknumber:");
-												bnum=sc.nextLine();
-												a[i].book_num=bnum;
-												System.out.println("Enter new bookname:");
-												bname=sc.nextLine();
-												a[i].book_name=bname;
-												System.out.println("Enter new booktype:");
-												btype=sc.nextLine();
-												a[i].booktype=btype;
-												System.out.println("Enter new author:");
-												bauth=sc.nextLine();
-												a[i].author=bauth;
-												System.out.println("Enter new pages:");
-												bpage=sc.nextInt();
-												a[i].page=bpage;
-												fctrl=sc.nextLine();
+												editbook(sc,a,i);
 												break;
 											}
 											else if(i==bamount-1)
@@ -702,16 +514,7 @@ public class Library
 										{
 											if(bname.equals(a[i].book_name))
 											{
-												System.out.print(a[i].book_num+"\t");
-												System.out.print(a[i].book_name+"\t\t");
-												System.out.print(a[i].booktype+"\t\t");
-												System.out.print(a[i].author+"\t");
-												System.out.print(a[i].page+" pages\t");
-												if(a[i].yesno==false)
-													System.out.print("Available\t");
-												else if(a[i].yesno==true)
-													System.out.println("Nonavailable\t");
-												System.out.println(a[i].people+" people reserved");
+												printbook(a,i);
 												break;
 											}
 											else if(i==bamount-1)
@@ -725,16 +528,7 @@ public class Library
 										{
 											if(bnum.equals(a[i].book_num))
 											{
-												System.out.print(a[i].book_num+"\t");
-												System.out.print(a[i].book_name+"\t\t");
-												System.out.print(a[i].booktype+"\t\t");
-												System.out.print(a[i].author+"\t");
-												System.out.print(a[i].page+" pages\t");
-												if(a[i].yesno==false)
-													System.out.print("Available\t");
-												else if(a[i].yesno==true)
-													System.out.println("Nonavailable\t");
-												System.out.println(a[i].people+" people reserved");
+												printbook(a,i);
 												break;
 											}
 											else if(i==bamount-1)
@@ -748,16 +542,7 @@ public class Library
 										{
 											if(btype.equals(a[i].booktype))
 											{
-												System.out.print(a[i].book_num+"\t");
-												System.out.print(a[i].book_name+"\t\t");
-												System.out.print(a[i].booktype+"\t\t");
-												System.out.print(a[i].author+"\t");
-												System.out.print(a[i].page+" pages\t");
-												if(a[i].yesno==false)
-													System.out.print("Available\t");
-												else if(a[i].yesno==true)
-													System.out.println("Nonavailable\t");
-												System.out.println(a[i].people+" people reserved");
+												printbook(a,i);
 											}
 											else if(i==bamount-1)
 												System.out.println("Failed, this book isn't in the list.");
@@ -766,16 +551,7 @@ public class Library
 									case "all":
 										for(int i=0;i<bamount;i++)
 										{
-											System.out.print(a[i].book_num+"\t");
-											System.out.print(a[i].book_name+"\t\t");
-											System.out.print(a[i].booktype+"\t\t");
-											System.out.print(a[i].author+"\t");
-											System.out.print(a[i].page+" pages\t");
-											if(a[i].yesno==false)
-												System.out.print("Available\t");
-											else if(a[i].yesno==true)
-												System.out.println("Nonavailable\t");
-											System.out.println(a[i].people+" people reserved");
+											printbook(a,i);
 										}
 										break;
 									default:
@@ -786,13 +562,7 @@ public class Library
 								
 							///查詢學生資料///
 							case "viewstudent":
-								System.out.println("Student number: 105502501");
-								System.out.println("Borrowed book:");
-								for(int j=0;j<boramount;j++)
-									System.out.println("\t"+bor[j].book_num+"\t"+bor[j].book_name);
-								System.out.println("Reserved book : ");
-								for(int k=0;k<resamount;k++)
-									System.out.println("\t"+res[k].book_num+"\t"+res[k].book_name);
+								studentinfo(boramount, resamount, bor, res);
 								break;
 								
 							///離開///
@@ -814,5 +584,123 @@ public class Library
 			}
 		}
 		sc.close();
+	}
+	
+	public static void borrow(Scanner sc, book[] a, book[] bor, book[] res, int i, int[] amount) {
+		String ynres;
+		if(a[i].yesno==false)	//無人借閱 成功借書
+		{
+			System.out.println("Successful!");
+			a[i].yesno=true;
+			bor[amount[0]]=a[i];
+			amount[0]++;
+		}
+		else if(a[i].yesno==true)	//有人借閱 詢問是否預約
+		{
+			System.out.println("Failed");
+			System.out.println("Do you want to reserve this book?");
+			ynres=sc.nextLine();
+			switch (ynres) {
+				case "yes":
+					if(a[i].people==10)	//已有十人預約 則預約失敗
+						System.out.println("Over 10 people reserved.");
+					else
+					{
+						System.out.println("Reserve completed.");
+						a[i].people++;
+						res[amount[1]]=a[i];
+						amount[1]++;
+					}
+					break;
+				case "no":
+					break;
+				default:
+					System.out.println("Error!");
+					break;
+			}
+		}
+	}
+	
+	public static void reserve(Scanner sc, book[] a, book[] bor, book[] res, int i, int[] amount) {
+		String ynres;
+		if(a[i].yesno==false)
+		{
+			System.out.println("Failed, no one borrowed this book.");
+			System.out.println("Do you want to borrow this book?");
+			ynres=sc.nextLine();
+			switch (ynres) {
+				case "yes":
+					System.out.println("Successful.");
+					a[i].yesno=true;
+					bor[amount[0]]=a[i];
+					amount[0]++;
+					break;
+				case "no":
+					break;
+				default:
+					System.out.println("Error!");
+					break;
+			}
+		}
+		else if(a[i].yesno==true)
+		{
+			if(a[i].people==10)
+				System.out.println("Over 10 people reserved.");
+			else
+			{
+				System.out.println("Reserve completed.");
+				a[i].people++;
+				res[amount[1]]=a[i];
+				amount[1]++;
+			}
+		}
+	}
+	
+	public static void printbook(book[] a, int i) {
+		System.out.print(a[i].book_num+"\t");
+		System.out.print(a[i].book_name+"\t\t");
+		System.out.print(a[i].booktype+"\t\t");
+		System.out.print(a[i].author+"\t");
+		System.out.print(a[i].page+" pages\t");
+		if(a[i].yesno==false)
+			System.out.print("Available\t");
+		else if(a[i].yesno==true)
+			System.out.println("Nonavailable\t");
+		System.out.println(a[i].people+" people reserved");
+	}
+	
+	public static void editbook(Scanner sc, book[] a, int i) {
+		String bnum, bname,btype, bauth;
+		int bpage;
+		System.out.println("Enter new booknumber:");
+		bnum=sc.nextLine();
+		a[i].book_num=bnum;
+		System.out.println("Enter new bookname:");
+		bname=sc.nextLine();
+		a[i].book_name=bname;
+		System.out.println("Enter new booktype:");
+		btype=sc.nextLine();
+		a[i].booktype=btype;
+		System.out.println("Enter new author:");
+		bauth=sc.nextLine();
+		a[i].author=bauth;
+		System.out.println("Enter new pages:");
+		bpage=sc.nextInt();
+		a[i].page=bpage;
+		bnum=sc.nextLine();
+	}
+
+	public static void studentinfo(int boramount, int resamount, book[] bor, book[] res) {
+		System.out.println("Student number : 105502501");
+		
+		//列出已借閱書籍
+		System.out.println("Borrowed book : ");
+		for(int j=0;j<boramount;j++)
+			System.out.println("\t"+bor[j].book_num+"\t"+bor[j].book_name);
+		
+		//列出已預約書籍
+		System.out.println("Reserved book : ");
+		for(int k=0;k<resamount;k++)
+			System.out.println("\t"+res[k].book_num+"\t"+res[k].book_name);
 	}
 }
